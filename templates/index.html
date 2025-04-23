@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Notas</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+</head>
+<body>
+    <h1>Organizador de Notas</h1>
+
+    <form action="/adicionar" method="post" class="adicionar-form">
+        <input type="text" name="disciplina" placeholder="Disciplina" required>
+        <input type="number" step="0.01" name="unidade1" placeholder="Unidade 1" required>
+        <input type="number" step="0.01" name="unidade2" placeholder="Unidade 2" required>
+        <button type="submit">Adicionar</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Disciplina</th>
+                <th>U1</th>
+                <th>U2</th>
+                <th>Resultado</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for nota in notas %}
+            <tr>
+                <form action="{{ url_for('editar', id_nota=nota[0]) }}" method="post" class="editar-form">
+                    <td data-label="ID">{{ nota[0] }}</td>
+                    <td data-label="Disciplina"><input type="text" name="disciplina" value="{{ nota[1] }}"></td>
+                    <td data-label="Unidade 1"><input type="number" step="0.01" name="unidade1" value="{{ nota[2] }}"></td>
+                    <td data-label="Unidade 2"><input type="number" step="0.01" name="unidade2" value="{{ nota[3] }}"></td>
+                    <td data-label="Resultado">{{ nota[4] }}</td>
+                    <td data-label="Ações">
+                        <button type="submit" id="btn_salvar">Salvar</button>
+                        <a href="{{ url_for('deletar', id_nota=nota[0]) }}">Deletar</a>
+                    </td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/static/service-worker.js');
+        }
+        </script>
+        
+</body>
+</html>
